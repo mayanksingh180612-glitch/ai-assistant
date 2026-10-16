@@ -4,804 +4,254 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mayank AI - Your AI Assistant</title>
+<title>Mayank AI | Smart Assistant</title>
+<meta name="theme-color" content="#090b13">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --bg: #080b14;
-  --panel: #101522;
-  --border: rgba(255,255,255,.09);
-  --text: #f3f5ff;
-  --muted: #929bb2;
-  --accent: #8b75ff;
-}
-
-body {
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  height: 100vh;
-  overflow: hidden;
-}
-
-button, textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-.app {
-  display: flex;
-  height: 100vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-  width: 255px;
-  flex-shrink: 0;
-  background: #0c101b;
-  border-right: 1px solid var(--border);
-  padding: 22px 15px;
-  display: flex;
-  flex-direction: column;
-  transition: transform .3s ease;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 4px 7px 25px;
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: -.7px;
-}
-
-.logo {
-  width: 38px;
-  height: 38px;
-  border-radius: 13px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg,#a78bfa,#635bff,#36c8ed);
-  box-shadow: 0 0 25px #7868ff40;
-  font-size: 21px;
-}
-
-.brand span {
-  color: #a99aff;
-}
-
-.new-chat {
-  border: 1px solid #8171ff55;
-  color: white;
-  background: #8171ff16;
-  padding: 13px;
-  border-radius: 12px;
-  text-align: left;
-  transition: .25s;
-}
-
-.new-chat:hover {
-  background: #8171ff30;
-  transform: translateY(-2px);
-}
-
-.side-label {
-  color: #69748c;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  margin: 29px 8px 13px;
-  font-weight: 700;
-}
-
-.history {
-  overflow-y: auto;
-  flex: 1;
-}
-
-.history-item {
-  color: #a8b0c3;
-  font-size: 13px;
-  padding: 12px 10px;
-  border-radius: 9px;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.history-item:hover {
-  background: #ffffff09;
-  color: white;
-}
-
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  border-top: 1px solid var(--border);
-  padding: 18px 4px 0;
-}
-
-.avatar {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: linear-gradient(135deg,#5146b9,#ae75ff);
-  font-weight: 800;
-}
-
-.profile strong {
-  font-size: 13px;
-}
-
-.profile small {
-  display: block;
-  color: var(--muted);
-  margin-top: 4px;
-}
-
-/* MAIN */
-.main {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  background:
-    radial-gradient(ellipse at 50% 15%,#4d3ca71b,transparent 42%),
-    var(--bg);
-}
-
-.topbar {
-  height: 72px;
-  padding: 0 27px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
-
-.model {
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.model small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 4px;
-  font-weight: 400;
-}
-
-.status {
-  color: #8ee6b1;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.status i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #54dc91;
-  box-shadow: 0 0 10px #54dc91;
-}
-
-.menu-btn {
-  display: none;
-  background: none;
-  color: white;
-  border: none;
-  font-size: 23px;
-}
-
-.chat {
-  flex: 1;
-  overflow-y: auto;
-  padding: 35px 20px 25px;
-  scroll-behavior: smooth;
-}
-
-.content {
-  max-width: 790px;
-  margin: auto;
-}
-
-/* WELCOME */
-.welcome {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 15px 0 40px;
-  animation: appear .7s ease;
-}
-
-.orb {
-  width: 83px;
-  height: 83px;
-  display: grid;
-  place-items: center;
-  font-size: 38px;
-  border-radius: 27px;
-  background: linear-gradient(145deg,#a38aff,#6054db 60%,#242e75);
-  box-shadow: 0 0 60px #7765ff2e, inset 0 1px 1px #ffffff77;
-  animation: float 4s ease-in-out infinite;
-}
-
-.welcome h1 {
-  font-size: clamp(29px,5vw,46px);
-  letter-spacing: -1.8px;
-  margin-top: 28px;
-  line-height: 1.2;
-}
-
-.gradient {
-  background: linear-gradient(90deg,#a998ff,#71d6ff);
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
-.welcome p {
-  color: var(--muted);
-  line-height: 1.8;
-  max-width: 470px;
-  font-size: 14px;
-  margin-top: 15px;
-}
-
-.suggestions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  width: 100%;
-  margin-top: 37px;
-}
-
-.suggestion {
-  background: #ffffff04;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px;
-  text-align: left;
-  color: white;
-  transition: .25s;
-}
-
-.suggestion:hover {
-  border-color: #9382ff88;
-  background: #8b75ff12;
-  transform: translateY(-3px);
-}
-
-.suggestion .emoji {
-  font-size: 22px;
-  display: block;
-  margin-bottom: 12px;
-}
-
-.suggestion strong {
-  font-size: 13px;
-}
-
-.suggestion small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.6;
-  margin-top: 7px;
-}
-
-/* MESSAGES */
-.message {
-  display: flex;
-  gap: 13px;
-  margin: 0 0 27px;
-  animation: appear .3s ease;
-}
-
-.message.user {
-  flex-direction: row-reverse;
-}
-
-.msg-avatar {
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 11px;
-  background: #8875ff22;
-  border: 1px solid #8875ff32;
-  font-size: 15px;
-}
-
-.user .msg-avatar {
-  background: #242c42;
-  border-color: var(--border);
-}
-
-.msg-body {
-  min-width: 0;
-  max-width: 85%;
-}
-
-.msg-name {
-  color: #a4adc1;
-  font-size: 11px;
-  margin: 2px 0 9px;
-}
-
-.bubble {
-  font-size: 14px;
-  line-height: 1.85;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-}
-
-.user .bubble {
-  background: #8875ff1b;
-  border: 1px solid #8875ff35;
-  padding: 11px 15px;
-  border-radius: 15px 4px 15px 15px;
-}
-
-.bot .bubble {
-  color: #dce2f1;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.actions button {
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  background: transparent;
-  color: var(--muted);
-  padding: 5px 9px;
-  font-size: 11px;
-}
-
-.actions button:hover {
-  color: white;
-  background: #ffffff0b;
-}
-
-.typing {
-  display: flex;
-  gap: 5px;
-  padding: 12px 0;
-}
-
-.typing span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #a99aff;
-  animation: bounce .8s infinite alternate;
-}
-
-.typing span:nth-child(2) { animation-delay: .15s; }
-.typing span:nth-child(3) { animation-delay: .3s; }
-
-/* INPUT */
-.composer-area {
-  padding: 12px 20px 18px;
-  background: linear-gradient(transparent,var(--bg) 20%);
-  flex-shrink: 0;
-}
-
-.composer {
-  max-width: 790px;
-  margin: auto;
-  padding: 10px 12px 10px 17px;
-  border: 1px solid #ffffff20;
-  border-radius: 19px;
-  background: #131827e8;
-  box-shadow: 0 10px 40px #0003;
-  transition: border-color .25s, box-shadow .25s;
-}
-
-.composer:focus-within {
-  border-color: #8b75ff99;
-  box-shadow: 0 0 0 3px #8b75ff0c;
-}
-
-#prompt {
-  width: 100%;
-  resize: none;
-  min-height: 29px;
-  max-height: 150px;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: white;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-#prompt::placeholder {
-  color: #737e95;
-}
-
-.composer-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 7px;
-}
-
-.input-note {
-  font-size: 10px;
-  color: #69748b;
-}
-
-.send {
-  width: 38px;
-  height: 38px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg,#a493ff,#7560f6);
-  color: white;
-  font-size: 19px;
-  transition: .2s;
-}
-
-.send:hover {
-  transform: scale(1.06);
-  box-shadow: 0 0 20px #8b75ff55;
-}
-
-.send:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
-
-.disclaimer {
-  text-align: center;
-  color: #5f6a81;
-  font-size: 10px;
-  margin-top: 12px;
-}
-
-@keyframes appear {
-  from { opacity: 0; transform: translateY(9px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes float {
-  0%,100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-8px) rotate(2deg); }
-}
-
-@keyframes bounce {
-  to { transform: translateY(-5px); opacity: .5; }
-}
-
-@media(max-width:650px) {
-  .sidebar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    z-index: 10;
-    transform: translateX(-100%);
-    box-shadow: 20px 0 70px #0008;
-  }
-
-  .sidebar.open { transform: translateX(0); }
-
-  .menu-btn { display: block; }
-
-  .topbar { padding: 0 16px; height: 64px; }
-
-  .chat { padding: 22px 16px; }
-
-  .suggestions { grid-template-columns: 1fr; gap: 9px; }
-
-  .suggestion {
-    padding: 13px 15px;
-  }
-
-  .suggestion .emoji {
-    display: inline;
-    margin-right: 8px;
-  }
-
-  .suggestion small { margin-left: 32px; }
-
-  .welcome { padding-top: 12px; }
-
-  .composer-area { padding: 8px 12px 13px; }
-
-  .msg-body { max-width: 88%; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:#090b13;color:#f5f5ff;height:100dvh}
+button,textarea,input{font:inherit}
+button{cursor:pointer}
+.app{display:flex;height:100dvh}
+.sidebar{width:245px;flex-shrink:0;background:#0e111c;border-right:1px solid #ffffff12;padding:22px 15px;display:flex;flex-direction:column}
+.brand{font-size:23px;font-weight:800;padding:5px 5px 28px}
+.brand span{color:#a795ff}
+.logo{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#c1a8ff,#6752e9);margin-right:7px}
+.new{padding:13px;border-radius:12px;background:#8875ff17;border:1px solid #8875ff55;color:white;text-align:left}
+.label{font-size:11px;letter-spacing:2px;color:#727d94;margin:28px 8px 14px}
+#history{overflow:auto;flex:1}
+.history-item{padding:12px 9px;border-radius:9px;color:#abb3c6;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile{border-top:1px solid #ffffff12;padding-top:17px;display:flex;gap:10px;align-items:center;font-size:13px}
+.avatar{width:37px;height:37px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#6d5ce7,#bd83ff);font-weight:bold}
+.profile small{display:block;color:#8892a9;margin-top:4px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 0%,#6550c51a,transparent 50%),#090b13}
+header{height:70px;flex-shrink:0;border-bottom:1px solid #ffffff10;padding:0 25px;display:flex;align-items:center;justify-content:space-between}
+header strong{font-size:15px}
+header small{display:block;color:#929bb1;font-size:11px;margin-top:5px}
+.status{font-size:12px;color:#83e7ae}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#55db91;margin-right:7px}
+.menu{display:none;background:none;border:0;color:white;font-size:22px}
+#chat{flex:1;overflow-y:auto;padding:30px 18px;scroll-behavior:smooth}
+.content{max-width:780px;margin:auto}
+.welcome{min-height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0 45px;animation:fade .5s}
+.orb{height:78px;width:78px;display:grid;place-items:center;border-radius:25px;background:linear-gradient(140deg,#c1a8ff,#6752e9,#2c78a7);font-size:37px;box-shadow:0 0 55px #8c73ff30;animation:float 4s infinite ease-in-out}
+h1{font-size:clamp(29px,5vw,45px);letter-spacing:-1.5px;line-height:1.2;margin-top:25px}
+.gradient{background:linear-gradient(90deg,#b29cff,#77ddff);color:transparent;background-clip:text}
+.welcome>p{color:#9ba5ba;font-size:14px;line-height:1.8;max-width:460px;margin-top:15px}
+.suggestions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
+.suggestion{text-align:left;color:white;background:#ffffff05;border:1px solid #ffffff13;border-radius:14px;padding:17px;transition:.2s}
+.suggestion:hover{border-color:#9b86ff88;background:#8875ff10;transform:translateY(-2px)}
+.suggestion b{font-size:13px}
+.suggestion p{font-size:11px;color:#9ba5ba;margin-top:6px;line-height:1.6}
+.icon{display:block;font-size:21px;margin-bottom:9px}
+.message{display:flex;gap:12px;margin-bottom:26px;animation:fade .25s}
+.message.user{flex-direction:row-reverse}
+.msgicon{flex-shrink:0;width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#8875ff24}
+.user .msgicon{background:#252b3b}
+.msgbody{max-width:85%;min-width:0}
+.msgname{font-size:11px;color:#9ba5ba;margin:2px 0 9px}
+.bubble{font-size:14px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}
+.user .bubble{background:#8875ff1c;border:1px solid #8875ff35;padding:10px 14px;border-radius:14px 4px 14px 14px}
+.bot .bubble{color:#e0e5f3}
+.copy{margin-top:9px;border:1px solid #ffffff18;border-radius:7px;padding:5px 9px;color:#9ba5ba;background:transparent;font-size:11px}
+.typing{display:flex;gap:5px;padding:12px 0}
+.typing i{width:6px;height:6px;border-radius:50%;background:#a795ff;animation:bounce .7s infinite alternate}
+.typing i:nth-child(2){animation-delay:.15s}
+.typing i:nth-child(3){animation-delay:.3s}
+.composer-area{padding:12px 18px 17px;background:linear-gradient(transparent,#090b13 20%);flex-shrink:0}
+form{max-width:780px;margin:auto;border:1px solid #ffffff20;border-radius:18px;background:#141827;padding:12px;transition:.2s}
+form:focus-within{border-color:#8e7cff88;box-shadow:0 0 0 3px #8875ff0d}
+textarea{width:100%;resize:none;max-height:150px;min-height:30px;border:0;outline:0;background:transparent;color:white;line-height:1.7;font-size:14px}
+textarea::placeholder{color:#778198}
+.formbottom{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.hint{font-size:10px;color:#778198}
+.send{height:38px;width:40px;border:0;border-radius:11px;background:linear-gradient(135deg,#b09cff,#7460f5);color:white;font-size:21px}
+.send:disabled{opacity:.5}
+.disclaimer{text-align:center;color:#6c7589;font-size:10px;margin-top:10px}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{50%{transform:translateY(-7px) rotate(2deg)}}
+@keyframes bounce{to{transform:translateY(-5px);opacity:.5}}
+@media(max-width:650px){
+.sidebar{position:fixed;inset:0 auto 0 0;z-index:5;transform:translateX(-100%);transition:.25s;box-shadow:15px 0 50px #0008}
+.sidebar.open{transform:translateX(0)}
+.menu{display:block}
+header{height:63px;padding:0 14px}
+#chat{padding:20px 13px}
+.suggestions{grid-template-columns:1fr;gap:9px}
+.suggestion{padding:12px 14px}
+.icon{display:inline-block;margin:0 8px 0 0}
+.welcome>p{font-size:13px}
+.composer-area{padding:8px 10px 12px}
 }
 </style>
 </head>
 
 <body>
 <div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><span class="logo">✦</span>Mayank <span>AI</span></div>
+  <button class="new" id="newChat">＋ &nbsp; New chat</button>
+  <div class="label">RECENT CHATS</div>
+  <div id="history"></div>
+  <div class="profile"><div class="avatar">M</div><div><b>Mayank Singh</b><small>AI Assistant</small></div></div>
+</aside>
 
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="logo">✦</div>
-      Mayank <span>AI</span>
-    </div>
+<main class="main">
+<header>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="menu" id="menu" aria-label="Menu">☰</button>
+    <div><strong>Mayank AI</strong><small>AI Question Answer Assistant</small></div>
+  </div>
+  <div class="status"><span class="dot"></span>Ready</div>
+</header>
 
-    <button class="new-chat" id="newChat">＋ &nbsp; New conversation</button>
+<section id="chat">
+<div class="content" id="messages">
+<div class="welcome" id="welcome">
+  <div class="orb">✦</div>
+  <h1>Hello Mayank,<br><span class="gradient">how can I help?</span></h1>
+  <p>Ask questions, learn new skills, solve problems, write code and explore ideas with your AI assistant.</p>
+  <div class="suggestions">
+    <button class="suggestion" data-prompt="Explain artificial intelligence in simple Hindi"><span class="icon">🧠</span><b>Learn about AI</b><p>Understand new technology</p></button>
+    <button class="suggestion" data-prompt="Write a beautiful website in HTML CSS and JavaScript"><span class="icon">💻</span><b>Write code</b><p>Build your next website</p></button>
+    <button class="suggestion" data-prompt="Make a simple daily study timetable"><span class="icon">📚</span><b>Study smarter</b><p>Plan your learning</p></button>
+    <button class="suggestion" data-prompt="Give me five creative project ideas"><span class="icon">💡</span><b>Get ideas</b><p>Start a new project</p></button>
+  </div>
+</div>
+</div>
+</section>
 
-    <div class="side-label">RECENT CHATS</div>
-    <div class="history" id="history"></div>
-
-    <div class="profile">
-      <div class="avatar">M</div>
-      <div>
-        <strong>Mayank Singh</strong>
-        <small>AI Assistant Demo</small>
-      </div>
-    </div>
-  </aside>
-
-  <main class="main">
-    <header class="topbar">
-      <div style="display:flex;align-items:center;gap:13px">
-        <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
-        <div class="model">
-          Mayank AI
-          <small>Smart Assistant · Demo Mode</small>
-        </div>
-      </div>
-      <div class="status"><i></i> Ready to help</div>
-    </header>
-
-    <section class="chat" id="chat">
-      <div class="content" id="messages">
-        <div class="welcome" id="welcome">
-          <div class="orb">✦</div>
-          <h1>Hey Mayank,<br><span class="gradient">what's on your mind?</span></h1>
-          <p>Your personal AI assistant. Ask questions, learn new things, write code, or explore your next big idea.</p>
-
-          <div class="suggestions">
-            <button class="suggestion" data-prompt="Explain artificial intelligence in simple words">
-              <span class="emoji">🧠</span><strong>Learn something new</strong>
-              <small>Understand AI in simple words</small>
-            </button>
-            <button class="suggestion" data-prompt="Write a modern website using HTML CSS and JavaScript">
-              <span class="emoji">💻</span><strong>Build something</strong>
-              <small>Create a website with code</small>
-            </button>
-            <button class="suggestion" data-prompt="Give me a study plan for a school student">
-              <span class="emoji">📚</span><strong>Study smarter</strong>
-              <small>Make a useful study plan</small>
-            </button>
-            <button class="suggestion" data-prompt="Give me five creative project ideas">
-              <span class="emoji">💡</span><strong>Explore ideas</strong>
-              <small>Find your next great project</small>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="composer-area">
-      <form class="composer" id="chatForm">
-        <textarea id="prompt" rows="1" placeholder="Ask Mayank AI anything..." aria-label="Your question"></textarea>
-        <div class="composer-bottom">
-          <span class="input-note">↵ Enter to send · Shift + Enter for new line</span>
-          <button class="send" id="sendBtn" type="submit" aria-label="Send message">↑</button>
-        </div>
-      </form>
-      <div class="disclaimer">Mayank AI can make mistakes. Verify important information.</div>
-    </footer>
-  </main>
+<footer class="composer-area">
+<form id="form">
+  <textarea id="prompt" rows="1" placeholder="Message Mayank AI..." aria-label="Ask a question"></textarea>
+  <div class="formbottom"><span class="hint">Enter to send · Shift + Enter for new line</span><button class="send" id="send" type="submit" aria-label="Send">↑</button></div>
+</form>
+<div class="disclaimer">AI can make mistakes. Verify important information.</div>
+</footer>
+</main>
 </div>
 
 <script>
 const chat = document.getElementById("chat");
 const messages = document.getElementById("messages");
-const promptBox = document.getElementById("prompt");
-const chatForm = document.getElementById("chatForm");
-const sendBtn = document.getElementById("sendBtn");
-const welcome = document.getElementById("welcome");
+const input = document.getElementById("prompt");
+const send = document.getElementById("send");
 const historyBox = document.getElementById("history");
 const sidebar = document.getElementById("sidebar");
 
 let busy = false;
-let chatHistory = [];
-let activeChat = [];
-let chatCounter = 0;
+let conversation = [];
+let chats = [];
+let currentTitle = "";
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
 
 function scrollBottom() {
   chat.scrollTop = chat.scrollHeight;
 }
 
-function escapeHTML(text) {
-  return String(text).replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
-}
-
-function addMessage(role, text, showActions = false) {
-  const emptyWelcome = document.getElementById("welcome");
-  if (emptyWelcome) emptyWelcome.remove();
-
+function addMessage(role, text) {
+  document.getElementById("welcome")?.remove();
   const row = document.createElement("div");
   row.className = "message " + (role === "user" ? "user" : "bot");
-
-  const icon = role === "user" ? "M" : "✦";
-  const name = role === "user" ? "You" : "Mayank AI";
-
   row.innerHTML = `
-    <div class="msg-avatar">${icon}</div>
-    <div class="msg-body">
-      <div class="msg-name">${name}</div>
+    <div class="msgicon">${role === "user" ? "M" : "✦"}</div>
+    <div class="msgbody">
+      <div class="msgname">${role === "user" ? "You" : "Mayank AI"}</div>
       <div class="bubble">${escapeHTML(text)}</div>
-      ${showActions ? `
-        <div class="actions">
-          <button class="copy-btn">▢ Copy answer</button>
-        </div>` : ""}
+      ${role === "assistant" ? '<button class="copy">▢ Copy answer</button>' : ""}
     </div>`;
 
-  if (showActions) {
-    row.querySelector(".copy-btn").addEventListener("click", async e => {
-      try {
-        await navigator.clipboard.writeText(text);
-        e.target.textContent = "✓ Copied";
-      } catch {
-        e.target.textContent = "Copy unavailable";
-      }
-    });
-  }
+  row.querySelector(".copy")?.addEventListener("click", async e => {
+    try {
+      await navigator.clipboard.writeText(text);
+      e.target.textContent = "✓ Copied";
+    } catch {
+      e.target.textContent = "Copy unavailable";
+    }
+  });
 
   messages.appendChild(row);
   scrollBottom();
-  return row;
 }
 
 function showTyping() {
   const row = document.createElement("div");
   row.className = "message bot";
-  row.innerHTML = `
-    <div class="msg-avatar">✦</div>
-    <div class="msg-body">
-      <div class="msg-name">Mayank AI is thinking...</div>
-      <div class="typing"><span></span><span></span><span></span></div>
-    </div>`;
+  row.innerHTML = '<div class="msgicon">✦</div><div class="msgbody"><div class="msgname">Mayank AI is thinking...</div><div class="typing"><i></i><i></i><i></i></div></div>';
   messages.appendChild(row);
   scrollBottom();
   return row;
 }
 
-/*
-  DEMO RESPONSE ENGINE
-  This provides sample answers without an API.
-  It is NOT a real AI model.
-*/
-function getDemoAnswer(question) {
-  const q = question.toLowerCase();
+async function askAI(question) {
+  // GitHub Pages static sites have no private backend.
+  // Never insert a secret API key into this public file.
+  // Configure a secure backend endpoint to enable real AI.
+  const endpoint = "YOUR_SECURE_BACKEND_URL/api/chat";
 
-  if (/\b(hi|hello|hey|namaste|hii)\b/.test(q)) {
-    return "Hello Mayank! 👋\n\nWelcome to Mayank AI. I'm your demo assistant. You can ask me about coding, studies, science, websites, and creative ideas.\n\nTry asking: \"How do I make a website?\"";
+  if (endpoint.startsWith("YOUR_")) {
+    throw new Error(
+      "GitHub Pages is static hosting. To enable Groq AI, deploy a secure backend and replace YOUR_SECURE_BACKEND_URL with its HTTPS URL. Never publish your private Groq API key in this file."
+    );
   }
 
-  if (q.includes("your name") || q.includes("who are you") || q.includes("tumhara naam")) {
-    return "I'm Mayank AI ✦, a demo AI assistant website created with HTML, CSS, and JavaScript.\n\nConnect a real AI API to enable intelligent, open-ended question answering.";
-  }
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      messages: [...conversation, {role:"user", content:question}]
+    })
+  });
 
-  if (q.includes("artificial intelligence") || q.includes("what is ai") || q.includes("ai kya")) {
-    return "Artificial Intelligence (AI) is technology that allows computers to perform tasks such as understanding language, recognizing images, and solving problems.\n\nExamples:\n• AI chat assistants\n• Image recognition\n• Language translation\n• Voice assistants\n\nReal AI systems use trained models to generate answers.";
-  }
-
-  if (q.includes("html")) {
-    return "HTML is the language used to structure a webpage. 🚀\n\nA simple HTML page looks like this:\n\n<!DOCTYPE html>\n<html>\n<head>\n  <title>My Website</title>\n</head>\n<body>\n  <h1>Hello World!</h1>\n  <p>My first website.</p>\n</body>\n</html>\n\nSave it as index.html and open it in your browser. CSS adds styling, while JavaScript adds interactions.";
-  }
-
-  if (q.includes("javascript") || q.includes("java script")) {
-    return "JavaScript makes websites interactive. For example, it can respond to button clicks, validate forms, update content, and call an AI backend.\n\nExample:\n\nconst button = document.querySelector('button');\nbutton.addEventListener('click', () => {\n  alert('Hello Mayank!');\n});\n\nPut this in a script tag or a separate .js file.";
-  }
-
-  if (q.includes("website") || q.includes("web site")) {
-    return "You can build a modern website in three steps:\n\n1. HTML — create the page structure.\n2. CSS — add colors, layouts, animations, and responsive styling.\n3. JavaScript — make buttons, menus, and other features work.\n\nFor Mayank AI, the next step is connecting a real AI model through a secure backend.";
-  }
-
-  if (q.includes("study") || q.includes("school") || q.includes("padhai")) {
-    return "Here is a simple study routine 📚\n\n• 25 minutes: Study one topic.\n• 5 minutes: Take a break.\n• 25 minutes: Solve practice questions.\n• 10 minutes: Review what you learned.\n• At night: Quickly revise key points.\n\nAdjust the routine to your school timetable and take proper rest.";
-  }
-
-  if (q.includes("project") || q.includes("idea")) {
-    return "Here are five beginner-friendly projects 💡\n\n1. Personal portfolio website.\n2. AI question-answer assistant.\n3. Cricket score dashboard.\n4. Weather application.\n5. House-price prediction using machine learning.\n\nStart with one small feature, test it, and then improve the design.";
-  }
-
-  if (q.includes("python")) {
-    return "Python is a beginner-friendly programming language used for automation, websites, data science, and machine learning.\n\nExample:\n\nname = 'Mayank'\nprint('Hello, ' + name)\n\nSave this as main.py and run it with Python installed.";
-  }
-
-  if (q.includes("cricket")) {
-    return "Cricket project idea 🏏\n\nYou can build a cricket website with:\n• Match scorecards\n• Player statistics\n• Team information\n• A simple batting game\n• Live scores using a suitable cricket data API\n\nRemember, actual live scores need a reliable data source.";
-  }
-
-  if (q.includes("thank")) {
-    return "You're welcome, Mayank! 😊\n\nKeep learning and building. Ask another question whenever you're ready.";
-  }
-
-  return "Thanks for your question! 😊\n\nI'm currently running in DEMO MODE, so I can only provide a few predefined answers. I don't yet have a real AI model connected to answer every question.\n\nTo make me a real AI assistant, connect an AI model through a backend server. Then I can generate answers to a much wider range of questions.\n\nYour question: " + question;
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "AI request failed");
+  if (!data.reply) throw new Error("No AI answer received");
+  return data.reply;
 }
 
-function updateHistory(question) {
-  const firstQuestion = question.length > 32
-    ? question.slice(0, 32) + "..."
-    : question;
-
-  if (!activeChat.length) {
-    chatCounter++;
-    activeChat.title = firstQuestion || "New conversation";
-    const item = document.createElement("div");
-    item.className = "history-item";
-    item.textContent = "◷  " + activeChat.title;
-    item.title = activeChat.title;
-    historyBox.prepend(item);
-  }
+function saveCurrentChat() {
+  if (!conversation.length) return;
+  const saved = {title:currentTitle, messages:conversation.slice()};
+  chats.unshift(saved);
+  const item = document.createElement("div");
+  item.className = "history-item";
+  item.textContent = "◷  " + saved.title;
+  item.addEventListener("click", () => {
+    conversation = saved.messages.slice();
+    currentTitle = saved.title;
+    messages.innerHTML = "";
+    conversation.forEach(m => addMessage(m.role, m.content));
+    sidebar.classList.remove("open");
+  });
+  historyBox.prepend(item);
 }
 
-function newConversation() {
-  if (activeChat.length) {
-    chatHistory.unshift({
-      title: activeChat.title || "Conversation",
-      messages: activeChat.slice()
-    });
-  }
+function welcomeHTML() {
+  return `
+  <div class="welcome" id="welcome">
+    <div class="orb">✦</div>
+    <h1>Hello Mayank,<br><span class="gradient">how can I help?</span></h1>
+    <p>Ask questions, learn new skills, solve problems, write code and explore ideas with your AI assistant.</p>
+    <div class="suggestions">
+      <button class="suggestion" data-prompt="Explain artificial intelligence in simple Hindi"><span class="icon">🧠</span><b>Learn about AI</b><p>Understand new technology</p></button>
+      <button class="suggestion" data-prompt="Write a beautiful website in HTML CSS and JavaScript"><span class="icon">💻</span><b>Write code</b><p>Build your next website</p></button>
+      <button class="suggestion" data-prompt="Make a simple daily study timetable"><span class="icon">📚</span><b>Study smarter</b><p>Plan your learning</p></button>
+      <button class="suggestion" data-prompt="Give me five creative project ideas"><span class="icon">💡</span><b>Get ideas</b><p>Start a new project</p></button>
+    </div>
+  </div>`;
+}
 
-  activeChat = [];
-  messages.innerHTML = `
-    <div class="welcome" id="welcome">
-      <div class="orb">✦</div>
-      <h1>Hey Mayank,<br><span class="gradient">what's on your mind?</span></h1>
-      <p>Your personal AI assistant. Ask questions, learn new things, write code, or explore your next big idea.</p>
-      <div class="suggestions">
-        <button class="suggestion" data-prompt="Explain artificial intelligence in simple words">
-          <span class="emoji">🧠</span><strong>Learn something new</strong>
-          <small>Understand AI in simple words</small>
-        </button>
-        <button class="suggestion" data-prompt="Write a modern website using HTML CSS and JavaScript">
-          <span class="emoji">💻</span><strong>Build something</strong>
-          <small>Create a website with code</small>
-        </button>
-        <button class="suggestion" data-prompt="Give me a study plan for a school student">
-          <span class="emoji">📚</span><strong>Study smarter</strong>
-          <small>Make a useful study plan</small>
-        </button>
-        <button class="suggestion" data-prompt="Give me five creative project ideas">
-          <span class="emoji">💡</span><strong>Explore ideas</strong>
-          <small>Find your next great project</small>
-        </button>
-      </div>
-    </div>`;
-
-  promptBox.value = "";
+function newChat() {
+  saveCurrentChat();
+  conversation = [];
+  currentTitle = "";
+  messages.innerHTML = welcomeHTML();
+  input.value = "";
   sidebar.classList.remove("open");
 }
 
@@ -810,65 +260,56 @@ async function sendMessage(text) {
   if (!text || busy) return;
 
   busy = true;
-  sendBtn.disabled = true;
+  send.disabled = true;
+  input.value = "";
+  input.style.height = "30px";
 
-  updateHistory(text);
-  activeChat.push({ role: "user", text });
+  if (!currentTitle) currentTitle = text.slice(0, 32);
   addMessage("user", text);
-  promptBox.value = "";
-  promptBox.style.height = "29px";
-
   const typing = showTyping();
 
-  // Demo-only delay to simulate an assistant thinking.
-  await new Promise(resolve => setTimeout(resolve, 650));
-
-  const answer = getDemoAnswer(text);
-  typing.remove();
-
-  activeChat.push({ role: "assistant", text: answer });
-  addMessage("assistant", answer, true);
-
-  busy = false;
-  sendBtn.disabled = false;
-  promptBox.focus();
+  try {
+    const answer = await askAI(text);
+    conversation.push({role:"user", content:text});
+    conversation.push({role:"assistant", content:answer});
+    typing.remove();
+    addMessage("assistant", answer);
+  } catch (error) {
+    typing.remove();
+    addMessage("assistant", "AI connection is not configured yet.\n\n" + error.message);
+  } finally {
+    busy = false;
+    send.disabled = false;
+    input.focus();
+  }
 }
 
-chatForm.addEventListener("submit", event => {
-  event.preventDefault();
-  sendMessage(promptBox.value);
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  sendMessage(input.value);
 });
 
-promptBox.addEventListener("keydown", event => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    chatForm.requestSubmit();
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    document.getElementById("form").requestSubmit();
   }
 });
 
-promptBox.addEventListener("input", () => {
-  promptBox.style.height = "29px";
-  promptBox.style.height =
-    Math.min(promptBox.scrollHeight, 150) + "px";
+input.addEventListener("input", () => {
+  input.style.height = "30px";
+  input.style.height = Math.min(input.scrollHeight, 150) + "px";
 });
 
-document.addEventListener("click", event => {
-  const suggestion = event.target.closest("[data-prompt]");
-  if (suggestion) {
-    sendMessage(suggestion.dataset.prompt);
-  }
+document.addEventListener("click", e => {
+  const suggestion = e.target.closest("[data-prompt]");
+  if (suggestion) sendMessage(suggestion.dataset.prompt);
 });
 
-document.getElementById("newChat").addEventListener("click", newConversation);
-
-document.getElementById("menuBtn").addEventListener("click", () => {
-  sidebar.classList.toggle("open");
-});
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    sidebar.classList.remove("open");
-  }
+document.getElementById("newChat").addEventListener("click", newChat);
+document.getElementById("menu").addEventListener("click", () => sidebar.classList.toggle("open"));
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") sidebar.classList.remove("open");
 });
 </script>
 </body>
