@@ -48,40 +48,23 @@ Ask me anything. I'm ready to help you.
 </form>
 </div>
 
+
 <script>
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "PASTE_YOUR_NEW_GROQ_API_KEY_HERE";
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "llama-3.3-70b-versatile";
 
-const form = document.getElementById("form");
-const promptBox = document.getElementById("prompt");
-const chat = document.getElementById("chat");
-const send = document.getElementById("send");
-
-const history = [{
-  role: "system",
-  content: "You are Mayank AI, a friendly and helpful assistant. Answer clearly. Reply in the language the user uses."
-}];
-
-function addMessage(text, role) {
-  const welcome = chat.querySelector(".welcome");
-  if (welcome) welcome.remove();
-  const div = document.createElement("div");
-  div.className = "msg " + role;
-  div.textContent = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  window.scrollTo(0, document.body.scrollHeight);
-  return div;
-}
-
 async function askAI(text, bubble) {
-  if (!GROQ_API_KEY || GROQ_API_KEY === "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") {
-    bubble.textContent = "Pehle code mein YOUR_GROQ_API_KEY ki jagah apni Groq API key paste karo.";
+  if (
+    !GROQ_API_KEY ||
+    GROQ_API_KEY === "PASTE_YOUR_NEW_GROQ_API_KEY_HERE"
+  ) {
+    bubble.textContent =
+      "Please add your Groq API key in the code first.";
     return;
   }
 
-  history.push({role:"user", content:text});
+  history.push({ role: "user", content: text });
 
   try {
     const response = await fetch(API_URL, {
@@ -101,43 +84,25 @@ async function askAI(text, bubble) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || "API request failed: " + response.status);
+      throw new Error(
+        data.error?.message || "API request failed: " + response.status
+      );
     }
 
-    const answer = data.choices?.[0]?.message?.content || "No answer received.";
-    history.push({role:"assistant", content:answer});
+    const answer =
+      data.choices?.[0]?.message?.content || "No answer received.";
+
+    history.push({ role: "assistant", content: answer });
     bubble.textContent = answer;
+
   } catch (error) {
-    bubble.textContent = "Error: " + error.message +
-      "\n\nAPI key, internet connection aur Groq API access check karo.";
+    bubble.textContent =
+      "Error: " + error.message +
+      "\nCheck your API key and Groq API access.";
     history.pop();
   }
 }
-
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const text = promptBox.value.trim();
-  if (!text || send.disabled) return;
-
-  addMessage(text, "user");
-  promptBox.value = "";
-  send.disabled = true;
-  send.textContent = "...";
-
-  const bubble = addMessage("Thinking... ✨", "bot");
-  await askAI(text, bubble);
-
-  send.disabled = false;
-  send.textContent = "Send ➤";
-  promptBox.focus();
-});
-
-promptBox.addEventListener("keydown", event => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    form.requestSubmit();
-  }
-});
 </script>
+
 </body>
 </html>
